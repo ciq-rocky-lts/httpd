@@ -13,7 +13,7 @@
 Summary:              Apache HTTP Server
 Name:                 httpd
 Version:              2.4.37
-Release:              56%{?dist}.6
+Release:              56%{?dist}.7
 URL:                  https://httpd.apache.org/
 Source0:              https://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
 Source2:              httpd.logrotate
@@ -248,6 +248,8 @@ Patch236:             httpd-2.4.37-CVE-2006-20001.patch
 Patch237:             httpd-2.4.37-CVE-2022-36760.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2176209
 Patch238:             httpd-2.4.37-CVE-2023-25690.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=2176211
+Patch239:             httpd-2.4.37-CVE-2023-27522.patch
 
 License:              ASL 2.0
 Group:                System Environment/Daemons
@@ -469,6 +471,7 @@ interface for storing and accessing per-user session data.
 %patch236 -p1 -b .CVE-2006-20001
 %patch237 -p1 -b .CVE-2022-36760
 %patch238 -p1 -b .CVE-2023-25690
+%patch239 -p1 -b .CVE-2023-27522
 
 # Patch in the vendor string
 sed -i '/^#define PLATFORM/s/Unix/%{vstring}/' os/unix/os.h
@@ -974,6 +977,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_rpmconfigdir}/macros.d/macros.httpd
 
 %changelog
+* Wed Aug 30 2023 Luboš Uhliarik <luhliari@redhat.com> - 2.4.37-56.7
+- Resolves: #2236177 - CVE-2023-27522 httpd:2.4/httpd: mod_proxy_uwsgi HTTP
+  response splitting
+
 * Thu Apr 27 2023 Luboš Uhliarik <luhliari@redhat.com> - 2.4.37-56.6
 - Resolves: #2190133 - mod_rewrite regression with CVE-2023-25690
 
