@@ -3,7 +3,7 @@
 %define suexec_caller apache
 %define mmn 20120211
 %define mmnisa %{mmn}%{__isa_name}%{__isa_bits}
-%define vstring %(source /etc/os-release; echo ${ID})
+%define vstring %(source /etc/os-release; echo ${NAME})
 %if 0%{?fedora} > 26 || 0%{?rhel} > 7
 %global mpm event
 %else
@@ -13,7 +13,7 @@
 Summary:              Apache HTTP Server
 Name:                 httpd
 Version:              2.4.37
-Release:              56%{?dist}.7
+Release:              65%{?dist}.1
 URL:                  https://httpd.apache.org/
 Source0:              https://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
 Source2:              httpd.logrotate
@@ -165,6 +165,12 @@ Patch89:              httpd-2.4.37-r1862410.patch
 Patch90:              httpd-2.4.37-hcheck-mem-issues.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2017543
 Patch91:              httpd-2.4.37-add-SNI-support.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=2159603
+Patch92:              httpd-2.4.37-mod_status-duplicate-key.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=2221083
+Patch93:              httpd-2.4.37-r1885607.patch
+# https://issues.redhat.com/browse/RHEL-14321
+Patch94:              httpd-2.4.57-r1884505+.patch
 
 # Security fixes
 Patch200:             httpd-2.4.37-r1851471.patch
@@ -250,6 +256,20 @@ Patch237:             httpd-2.4.37-CVE-2022-36760.patch
 Patch238:             httpd-2.4.37-CVE-2023-25690.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2176211
 Patch239:             httpd-2.4.37-CVE-2023-27522.patch
+# https://issues.redhat.com/browse/RHEL-14448
+Patch240:             httpd-2.4.37-CVE-2023-31122.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=2273491
+Patch241:             httpd-2.4.37-CVE-2023-38709.patch
+# CVE-2024-38474 and CVE-2024-38475 fixed in one patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=2295013
+# https://bugzilla.redhat.com/show_bug.cgi?id=2295014
+Patch242:             httpd-2.4.37-CVE-2024-38474+.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=2295012
+Patch243:             httpd-2.4.37-CVE-2024-38473.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=2295016
+Patch244:             httpd-2.4.37-CVE-2024-38477.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=2295022
+Patch245:             httpd-2.4.37-CVE-2024-39573.patch
 
 License:              ASL 2.0
 Group:                System Environment/Daemons
@@ -431,6 +451,9 @@ interface for storing and accessing per-user session data.
 %patch89 -p1 -b .r1862410
 %patch90 -p1 -b .hcheck-mem-issues
 %patch91 -p1 -b .SNI
+%patch92 -p1 -b .mod_status-dupl
+%patch93 -p1 -b .r1885607
+%patch94 -p1 -b .r1884505+
 
 %patch200 -p1 -b .r1851471
 %patch201 -p1 -b .CVE-2019-0211
@@ -472,6 +495,12 @@ interface for storing and accessing per-user session data.
 %patch237 -p1 -b .CVE-2022-36760
 %patch238 -p1 -b .CVE-2023-25690
 %patch239 -p1 -b .CVE-2023-27522
+%patch240 -p1 -b .CVE-2023-31122
+%patch241 -p1 -b .CVE-2023-38709
+%patch242 -p1 -b .CVE-2024-38474+
+%patch243 -p1 -b .CVE-2024-38473
+%patch244 -p1 -b .CVE-2024-38477
+%patch245 -p1 -b .CVE-2024-39573
 
 # Patch in the vendor string
 sed -i '/^#define PLATFORM/s/Unix/%{vstring}/' os/unix/os.h
@@ -977,11 +1006,57 @@ rm -rf $RPM_BUILD_ROOT
 %{_rpmconfigdir}/macros.d/macros.httpd
 
 %changelog
-* Wed Aug 30 2023 Luboš Uhliarik <luhliari@redhat.com> - 2.4.37-56.7
-- Resolves: #2236177 - CVE-2023-27522 httpd:2.4/httpd: mod_proxy_uwsgi HTTP
+* Thu Jul 11 2024 Luboš Uhliarik <luhliari@redhat.com> - 2.4.37-65.1
+- Resolves: RHEL-45812 - httpd:2.4/httpd: Substitution encoding issue
+  in mod_rewrite (CVE-2024-38474)
+- Resolves: RHEL-45785 - httpd:2.4/httpd: Encoding problem in
+  mod_proxy (CVE-2024-38473)
+- Resolves: RHEL-45777 - httpd:2.4/httpd: Improper escaping of output
+  in mod_rewrite (CVE-2024-38475)
+- Resolves: RHEL-45758 - httpd:2.4/httpd: null pointer dereference
+  in mod_proxy (CVE-2024-38477)
+- Resolves: RHEL-45743 - httpd:2.4/httpd: Potential SSRF
+  in mod_rewrite (CVE-2024-39573)
+
+* Wed Jun 12 2024 Luboš Uhliarik <luhliari@redhat.com> - 2.4.37-65
+- Resolves: RHEL-31857 - httpd:2.4/httpd: HTTP response
+  splitting (CVE-2023-38709)
+
+* Fri Feb 16 2024 Joe Orton <jorton@redhat.com> - 2.4.37-64
+- Resolves: RHEL-14448 - httpd: mod_macro: out-of-bounds read
+  vulnerability (CVE-2023-31122)
+
+* Wed Feb 14 2024 Joe Orton <jorton@redhat.com> - 2.4.37-63
+- mod_xml2enc: fix media type handling
+  Resolves: RHEL-14321
+
+* Thu Aug 17 2023 Johnny Hughes <jhughes@redhat.com> - 2.4.37-62
+- change for CentOS Stream Branding
+
+* Thu Jul 27 2023 Luboš Uhliarik <luhliari@redhat.com> - 2.4.37-62
+- Resolves: #2221083 - Apache Bug 57087: mod_proxy_fcgi doesn't send cgi 
+  CONTENT_LENGTH variable when the client request used Transfer-Encoding:chunked
+
+* Thu Jul 20 2023 Tomas Korbar <tkorbar@redhat.com> - 2.4.37-61
+- Fix issue found by covscan
+- Related: #2159603
+
+* Mon Jul 17 2023 Tomas Korbar <tkorbar@redhat.com> - 2.4.37-60
+- Another rebuild because of mistake in workflow
+- Related: #2159603
+
+* Mon Jul 17 2023 Tomas Korbar <tkorbar@redhat.com> - 2.4.37-59
+- Rebuild because of mistake in workflow
+- Related: #2159603
+
+* Mon Jul 17 2023 Tomas Korbar <tkorbar@redhat.com> - 2.4.37-58
+- Resolves: #2159603 - mod_status lists BusyWorkers IdleWorkers keys twice
+
+* Thu May 25 2023 Luboš Uhliarik <luhliari@redhat.com> - 2.4.37-57
+- Resolves: #2176723 - CVE-2023-27522 httpd:2.4/httpd: mod_proxy_uwsgi HTTP
   response splitting
 
-* Thu Apr 27 2023 Luboš Uhliarik <luhliari@redhat.com> - 2.4.37-56.6
+* Thu Apr 27 2023 Luboš Uhliarik <luhliari@redhat.com> - 2.4.37-56.5
 - Resolves: #2190133 - mod_rewrite regression with CVE-2023-25690
 
 * Sat Mar 18 2023 Luboš Uhliarik <luhliari@redhat.com> - 2.4.37-56.4
