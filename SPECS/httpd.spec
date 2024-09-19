@@ -19,7 +19,7 @@
 Summary: Apache HTTP Server
 Name: httpd
 Version: 2.4.6
-Release: 99%{?dist}.3
+Release: 99%{?dist}.7
 URL: http://httpd.apache.org/
 Source0: http://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
 Source1: centos-noindex.tar.gz
@@ -265,6 +265,10 @@ Patch305: CVE-2022-23943.patch
 Patch306: CVE-2022-26377.patch
 Patch307: CVE-2022-28615.patch
 Patch308: CVE-2022-29404.patch
+Patch309: CVE-2024-38474.patch
+Patch310: CVE-2022-31813.patch
+Patch311: CVE-2024-38476.patch
+Patch312: CVE-2024-38477.patch
 
 License: ASL 2.0
 Group: System Environment/Daemons
@@ -545,6 +549,10 @@ rm modules/ssl/ssl_engine_dh.c
 %patch306 -p1 -b .cve26377
 %patch307 -p1 -b .cve28615
 %patch308 -p1 -b .cve29404
+%patch309 -p1 -b .cve38474
+%patch310 -p1 -b .cve31813
+%patch311 -p1 -b .cve38476
+%patch312 -p1 -b .cve38477
 
 # need to be applied in the end since security patches
 # are changing the code that present in this patch
@@ -981,6 +989,19 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/rpm/macros.httpd
 
 %changelog
+* Tue Sep 17 2024 Matt Hink <mhink@ciq.com> - 2.4.6-99.7
+- CVE-2024-38477
+- Validated CVE-2024-38475 is fixed by CVE-2024-38474 patch
+
+* Tue Sep 10 2024 MCVE-2024-38474att Hink <mhink@ciq.com> - 2.4.6-99.6
+- CVE-2024-38476
+
+* Tue Sep 10 2024 Matt Hink <mhink@ciq.com> - 2.4.6-99.5
+- CVE-2022-31813
+
+* Tue Sep 10 2024 Matt Hink <mhink@ciq.com> - 2.4.6-99.4
+- CVE-2024-38474
+
 * Tue Jul 09 2024 Neil Hanlon <nhanlon@ciq.com> - 2.4.6-99.3
 - rebuild for multilib
 
