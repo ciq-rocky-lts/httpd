@@ -19,7 +19,7 @@
 Summary: Apache HTTP Server
 Name: httpd
 Version: 2.4.6
-Release: 99%{?dist}.7
+Release: 99%{?dist}.8
 URL: http://httpd.apache.org/
 Source0: http://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
 Source1: centos-noindex.tar.gz
@@ -989,6 +989,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/rpm/macros.httpd
 
 %changelog
+* Fri Sep 20 2024 Matt Hink <mhink@ciq.com> - 2.4.6-99.8
+- rework CVE-31813 patch
+
 * Tue Sep 17 2024 Matt Hink <mhink@ciq.com> - 2.4.6-99.7
 - CVE-2024-38477
 - Validated CVE-2024-38475 is fixed by CVE-2024-38474 patch
