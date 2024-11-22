@@ -19,7 +19,7 @@
 Summary: Apache HTTP Server
 Name: httpd
 Version: 2.4.6
-Release: 99%{?dist}.8
+Release: 99%{?dist}.9
 URL: http://httpd.apache.org/
 Source0: http://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
 Source1: centos-noindex.tar.gz
@@ -269,6 +269,7 @@ Patch309: CVE-2024-38474.patch
 Patch310: CVE-2022-31813.patch
 Patch311: CVE-2024-38476.patch
 Patch312: CVE-2024-38477.patch
+Patch313: CVE-2023-31122.patch
 
 License: ASL 2.0
 Group: System Environment/Daemons
@@ -553,6 +554,7 @@ rm modules/ssl/ssl_engine_dh.c
 %patch310 -p1 -b .cve31813
 %patch311 -p1 -b .cve38476
 %patch312 -p1 -b .cve38477
+%patch313 -p1 -b .cve31122
 
 # need to be applied in the end since security patches
 # are changing the code that present in this patch
@@ -989,6 +991,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/rpm/macros.httpd
 
 %changelog
+* Fri Nov 22 2024 Matt Hink <mhink@ciq.com> - 2.4.6-99.9
+- CVE-2023-31122
+
 * Fri Sep 20 2024 Matt Hink <mhink@ciq.com> - 2.4.6-99.8
 - rework CVE-31813 patch
 
