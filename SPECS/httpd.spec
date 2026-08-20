@@ -13,7 +13,7 @@
 Summary:              Apache HTTP Server
 Name:                 httpd
 Version:              2.4.62
-Release:              4%{?dist}.4
+Release:              4.1%{?dist}.4
 URL:                  https://httpd.apache.org/
 Source0:              https://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
 Source1:              https://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2.asc
@@ -113,6 +113,42 @@ Patch200:             httpd-2.4.62-CVE-2025-23048.patch
 Patch201:             httpd-2.4.62-CVE-2024-47252.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2374580
 Patch202:             httpd-2.4.62-CVE-2025-49812.patch
+# CVE-2025-58098 — upstream backport
+Patch203: httpd-2.4.62-CVE-2025-58098.patch
+# CVE-2025-65082 — upstream backport
+Patch204: httpd-2.4.62-CVE-2025-65082.patch
+# CVE-2025-66200 — upstream backport
+Patch205: httpd-2.4.62-CVE-2025-66200.patch
+# CVE-2026-28780 — upstream backport
+Patch206: httpd-2.4.62-CVE-2026-28780.patch
+# CVE-2026-24072 — upstream backport
+Patch207: httpd-2.4.62-CVE-2026-24072.patch
+# CVE-2026-33007 — upstream backport
+Patch208: httpd-2.4.62-CVE-2026-33007.patch
+# CVE-2026-33857 — upstream backport
+Patch209: httpd-2.4.62-CVE-2026-33857.patch
+# CVE-2026-34032 — upstream backport
+Patch210: httpd-2.4.62-CVE-2026-34032.patch
+# CVE-2026-34059 — upstream backport
+Patch211: httpd-2.4.62-CVE-2026-34059.patch
+# CVE-2026-29169 — upstream backport
+Patch212: httpd-2.4.62-CVE-2026-29169.patch
+# CVE-2026-33006 — upstream backport
+Patch213: httpd-2.4.62-CVE-2026-33006.patch
+# CVE-2026-44631 — upstream backport
+Patch214: httpd-2.4.62-CVE-2026-44631.patch
+# CVE-2026-42535 — upstream backport
+Patch215: httpd-2.4.62-CVE-2026-42535.patch
+# CVE-2026-34355 — upstream backport
+Patch216: httpd-2.4.62-CVE-2026-34355.patch
+# CVE-2026-34356 — upstream backport
+Patch217: httpd-2.4.62-CVE-2026-34356.patch
+# CVE-2026-42536 — upstream backport
+Patch218: httpd-2.4.62-CVE-2026-42536.patch
+# CVE-2026-44185 — upstream backport
+Patch219: httpd-2.4.62-CVE-2026-44185.patch
+# CVE-2026-44186 — upstream backport
+Patch220: httpd-2.4.62-CVE-2026-44186.patch
 
 License:              ASL 2.0
 BuildRequires:        gcc, autoconf, pkgconfig, findutils, xmlto
@@ -276,6 +312,24 @@ written in the Lua programming language.
 %patch200 -p1 -b .CVE-2025-23048
 %patch201 -p1 -b .CVE-2024-47252
 %patch202 -p1 -b .CVE-2025-49812
+%patch203 -p1 -b .CVE-2025-58098
+%patch204 -p1 -b .CVE-2025-65082
+%patch205 -p1 -b .CVE-2025-66200
+%patch206 -p1 -b .CVE-2026-28780
+%patch207 -p1 -b .CVE-2026-24072
+%patch208 -p1 -b .CVE-2026-33007
+%patch209 -p1 -b .CVE-2026-33857
+%patch210 -p1 -b .CVE-2026-34032
+%patch211 -p1 -b .CVE-2026-34059
+%patch212 -p1 -b .CVE-2026-29169
+%patch213 -p1 -b .CVE-2026-33006
+%patch214 -p1 -b .CVE-2026-44631
+%patch215 -p1 -b .CVE-2026-42535
+%patch216 -p1 -b .CVE-2026-34355
+%patch217 -p1 -b .CVE-2026-34356
+%patch218 -p1 -b .CVE-2026-42536
+%patch219 -p1 -b .CVE-2026-44185
+%patch220 -p1 -b .CVE-2026-44186
 
 # Patch in the vendor string
 sed -i '/^#define PLATFORM/s/Unix/%{vstring}/' os/unix/os.h
@@ -837,6 +891,26 @@ exit $rv
 %{_rpmconfigdir}/macros.d/macros.httpd
 
 %changelog
+* Sun Aug 16 2026 Jason Rodriguez <jrodriguez@ciq.com> - 1:2.4.62-4.1.4
+- Fix CVE-2025-58098
+- Fix CVE-2025-65082
+- Fix CVE-2025-66200
+- Fix CVE-2026-28780
+- Fix CVE-2026-24072
+- Fix CVE-2026-33007
+- Fix CVE-2026-33857
+- Fix CVE-2026-34032
+- Fix CVE-2026-34059
+- Fix CVE-2026-29169
+- Fix CVE-2026-33006
+- Fix CVE-2026-44631
+- Fix CVE-2026-42535
+- Fix CVE-2026-34355
+- Fix CVE-2026-34356
+- Fix CVE-2026-42536
+- Fix CVE-2026-44185
+- Fix CVE-2026-44186
+
 * Tue Jul 15 2025 Luboš Uhliarik <luhliari@redhat.com> - 2.4.62-4.4
 - Resolves: RHEL-99949 - CVE-2025-49812 httpd: HTTP Session Hijack via a TLS upgrade
 
