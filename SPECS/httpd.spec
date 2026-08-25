@@ -19,7 +19,7 @@
 Summary: Apache HTTP Server
 Name: httpd
 Version: 2.4.6
-Release: 99%{?dist}.12
+Release: 99.1%{?dist}.12
 URL: http://httpd.apache.org/
 Source0: http://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
 Source1: centos-noindex.tar.gz
@@ -274,6 +274,12 @@ Patch314: CVE-2024-39573.patch
 Patch315: CVE-2022-30522.patch
 Patch316: CVE-2024-47252.patch
 Patch317: CVE-2025-49812.patch
+# CVE-2026-28780 — upstream backport
+Patch318: httpd-2.4.6-CVE-2026-28780.patch
+# CVE-2026-33857 — upstream backport
+Patch319: httpd-2.4.6-CVE-2026-33857.patch
+# CVE-2026-34032 — upstream backport
+Patch320: httpd-2.4.6-CVE-2026-34032.patch
 
 License: ASL 2.0
 Group: System Environment/Daemons
@@ -567,6 +573,9 @@ rm modules/ssl/ssl_engine_dh.c
 # need to be applied in the end since security patches
 # are changing the code that present in this patch
 %patch147 -p1 -b .head-404
+%patch318 -p1 -b .CVE-2026-28780
+%patch319 -p1 -b .CVE-2026-33857
+%patch320 -p1 -b .CVE-2026-34032
 
 # Patch in the vendor string and the release string
 sed -i '/^#define PLATFORM/s/Unix/%{vstring}/' os/unix/os.h
@@ -999,6 +1008,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/rpm/macros.httpd
 
 %changelog
+* Sat Aug 15 2026 Jason Rodriguez <jrodriguez@ciq.com> - 2.4.6-99.1.12
+- Fix CVE-2026-28780
+- Fix CVE-2026-33857
+- Fix CVE-2026-34032
+
 * Fri Nov 14 2025 Trinity Quirk <tquirk@ciq.com> - 2.4.6-99.12
 - Patch CVE-2024-47252
 - Patch CVE-2025-49812
