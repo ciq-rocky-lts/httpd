@@ -19,7 +19,7 @@
 Summary: Apache HTTP Server
 Name: httpd
 Version: 2.4.6
-Release: 99.1%{?dist}.12
+Release: 99.2%{?dist}.12
 URL: http://httpd.apache.org/
 Source0: http://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
 Source1: centos-noindex.tar.gz
@@ -280,6 +280,18 @@ Patch318: httpd-2.4.6-CVE-2026-28780.patch
 Patch319: httpd-2.4.6-CVE-2026-33857.patch
 # CVE-2026-34032 — upstream backport
 Patch320: httpd-2.4.6-CVE-2026-34032.patch
+# CVE-2025-58098 — upstream backport
+Patch321: httpd-2.4.6-CVE-2025-58098.patch
+# CVE-2026-34059 — upstream backport
+Patch322: httpd-2.4.6-CVE-2026-34059.patch
+# CVE-2026-29169 — upstream backport
+Patch323: httpd-2.4.6-CVE-2026-29169.patch
+# CVE-2026-42536 — upstream backport
+Patch324: httpd-2.4.6-CVE-2026-42536.patch
+# CVE-2026-44185 — upstream backport
+Patch325: httpd-2.4.6-CVE-2026-44185.patch
+# CVE-2026-44186 — upstream backport
+Patch326: httpd-2.4.6-CVE-2026-44186.patch
 
 License: ASL 2.0
 Group: System Environment/Daemons
@@ -576,6 +588,12 @@ rm modules/ssl/ssl_engine_dh.c
 %patch318 -p1 -b .CVE-2026-28780
 %patch319 -p1 -b .CVE-2026-33857
 %patch320 -p1 -b .CVE-2026-34032
+%patch321 -p1 -b .CVE-2025-58098
+%patch322 -p1 -b .CVE-2026-34059
+%patch323 -p1 -b .CVE-2026-29169
+%patch324 -p1 -b .CVE-2026-42536
+%patch325 -p1 -b .CVE-2026-44185
+%patch326 -p1 -b .CVE-2026-44186
 
 # Patch in the vendor string and the release string
 sed -i '/^#define PLATFORM/s/Unix/%{vstring}/' os/unix/os.h
@@ -1008,6 +1026,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/rpm/macros.httpd
 
 %changelog
+* Fri Sep 04 2026 Jason Rodriguez <jrodriguez@ciq.com> - 2.4.6-99.2.12
+- Fix CVE-2025-58098
+- Fix CVE-2026-34059
+- Fix CVE-2026-29169
+- Fix CVE-2026-42536
+- Fix CVE-2026-44185
+- Fix CVE-2026-44186
+
 * Sat Aug 15 2026 Jason Rodriguez <jrodriguez@ciq.com> - 2.4.6-99.1.12
 - Fix CVE-2026-28780
 - Fix CVE-2026-33857
